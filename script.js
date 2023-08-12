@@ -10,15 +10,15 @@ var vk_width = 900;
 var vk_height = 750;
 var cell_size = 40;
 var colors = ["#d22","#3d3","blue","#aaa","yellow","purple"];
-var color_list = [];
 var salt = new Date();
 var user_area = [1];
 var area_color = "";
-var max_attempts = 25;
+var max_attempts = 3;
 var user_attempt = 1;
 var cells_in_row = parseInt(game_field_size /cell_size);
 var cells_in_field = cells_in_row * cells_in_row;
-
+var game_result = 0;
+var times_played = 0;
 
 function main()
 {
@@ -41,6 +41,7 @@ function set_body()
     eframe.style.background = "url('back.jpg')";
 
 }
+
 function create_game_field()
 {
     
@@ -74,6 +75,17 @@ function create_game_field()
     eframe.appendChild(elem);
     el1 = document.getElementById(1);
     area_color = el1.style.background;
+    update_area();
+}
+
+function generate_field()
+{
+    salt = new Date();
+    for(var i = 0; i < cells_in_field; i++)
+    {
+        cell = document.getElementById(i + 1);
+        cell.style.background = colors[parseInt(Math.random()*1000*(salt%119))%colors.length];
+    }
 }
 
 function cell_chosen(event)
@@ -83,35 +95,130 @@ function cell_chosen(event)
     area_color = cell.style.background;
     paint_area();
     update_area();
-    if(user_area.length >= cells_in_field)
-        display_winBar();
+    if(user_area.length >= cells_in_field || user_attempt >= max_attempts)
+    {
+       // alert(user_attempt);
+        if(user_attempt >= max_attempts)
+            game_result = 0;
+        else
+            game_result = 1;
+        if(times_played == 0)
+            create_resultBar();
+        else
+            display_resultBar();
+    }
     user_attempt += 1;
-    if(user_attempt > max_attempts)
-        display_loseBar();
     update_attempts();
    
 }
 
-function display_winBar()
+function create_resultBar()
 {
-    wb = document.createElement("div");
-    wb.id="winBar";
-    wb.style.position = "absolute";
-    wb.style.width = "auto";
-    wb.style.fontSize = "2em";
-    wb.innerText = "Получилось. Еще раз?"
+    rb = document.createElement("div");
+    rb.id="resultBar";
+    rb.style.position = "absolute";
+    rb.style.width = "auto";
+    rb.style.height = "auto";
+    rb.style.marginLeft = "320px";
+    rb.style.fontSize = "2em";
+    rb.style.marginTop = "280px";
+    rb.style.padding = "20px";
+    rb.style.border = "3px solid black";
+    rb.style.fontFamily = "Open Sans";
+    if(game_result)
+        rb.innerText = "Получилось! Еще раз?\n";
+    else
+        rb.innerText = "Не вышло... Пробуем ещё?\n";
+    rb.style.background = "white";
+    yeslem = document.createElement("div");
+    yeslem.id = "yesBtn";
+    yeslem.style.position = "relative";
+    yeslem.innerText = "Да";
+    yeslem.style.marginTop = "10px";
+    yeslem.style.background = "#3c3";
+    yeslem.style.width = "auto";
+    yeslem.style.display = "inline-block";
+    yeslem.style.height = "auto";
+    yeslem.style.marginLeft = "10%";
+    yeslem.style.padding = "5px 20px";
+    yeslem.onmouseover = mouse_over_choice;
+    yeslem.onmouseout = mouse_out_choice;
+    yeslem.onclick = restart;
+    yeslem.style.border = "2px solid black";
+    rb.appendChild(yeslem);
+    
+    surelem = document.createElement("div");
+    surelem.id = "sureBtn";
+    surelem.style.display = "inline-block";
+    surelem.style.position = "relative";
+    surelem.innerText = "Конечно!";
+    surelem.style.background = "#77c";
+    surelem.style.width = "auto";
+    surelem.style.height = "auto";
+    surelem.style.float = "right";
+    surelem.style.marginRight = "10%";
+    surelem.style.marginTop = "10px";
+    surelem.onmouseover = mouse_over_choice;
+    surelem.onmouseout = mouse_out_choice;
+    surelem.style.border = "2px solid black";
+    surelem.style.padding = "5px 10px";
+    surelem.onclick = restart;
+    rb.appendChild(surelem);
+
+    w = document.getElementById("window");
+    w.appendChild(rb);
 }
 
-function display_loseBar()
+function display_resultBar()
 {
-    lb = document.createElement("div");
-    lb.id="loseBar";
-    lb.style.position = "absolute";
-    lb.style.width = "auto";
-    lb.style.fontSize = "2em";
-    lb.innerText = "Не вышло. Пробуем ещё?"
+    rb = document.getElementById("resultBar");
+    rb.style.display = "block";
 }
 
+function mouse_over_choice(event)
+{
+    ch = document.elementFromPoint(event.x, event.y);
+    ch.style.cursor = "pointer";
+    ch.style.background = "black";
+    ch.style.color = "white";
+}
+
+function mouse_out_choice()
+{
+    yesb = document.getElementById("yesBtn");
+    yesb.style.cursor = "default";
+    sureb = document.getElementById("sureBtn");
+    sureb.style.cursor = "default";
+    yesb.style.background = "#3c3";
+    yesb.style.color = "black";
+    sureb.style.background = "#77c";
+    sureb.style.color = "black";
+    
+}
+
+function restart(event)
+{
+    ch = document.elementFromPoint(event.x, event.y);
+    ch.style.cursor = "default";
+    resbar = document.getElementById("resultBar");
+    resbar.style.display = "none";
+    times_played += 1;
+    if(times_played % 2 == 0)
+        show_add();
+    generate_field();
+    el1 = document.getElementById(1);
+    area_color = el1.style.background;
+    user_area = [1];
+    user_attempt = 1;
+    update_attempts();
+    update_area();
+
+}
+
+function show_add()
+{
+    alert("Показываю рекламу$$$");
+}
 function update_area()
 {
     for(var i = 1; i <= cells_in_field; i++)
