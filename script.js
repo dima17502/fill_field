@@ -31,5 +31,6 @@ function create_game_field()
     //elem.style.marginLeft = "600px";
     elem.style.marginTop = "50px";
     elem.style.border = "3px solid black";
+    elem.style.background = "black";
     document.body.appendChild(elem);
 }
