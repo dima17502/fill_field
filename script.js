@@ -18,7 +18,10 @@ var user_attempt = 1;
 var cells_in_row = parseInt(game_field_size /cell_size);
 var cells_in_field = cells_in_row * cells_in_row;
 var game_result = 0;
+var game_status = 1;
 var times_played = 0;
+
+
 
 function main()
 {
@@ -90,26 +93,28 @@ function generate_field()
 
 function cell_chosen(event)
 {
-
-    cell = document.elementFromPoint(event.x, event.y);
-    area_color = cell.style.background;
-    paint_area();
-    update_area();
-    if(user_area.length >= cells_in_field || user_attempt >= max_attempts)
+    if(game_status)
     {
+        cell = document.elementFromPoint(event.x, event.y);
+        area_color = cell.style.background;
+        paint_area();
+        update_area();
+        if(user_area.length >= cells_in_field || user_attempt >= max_attempts)
+        {
        // alert(user_attempt);
-        if(user_attempt >= max_attempts)
-            game_result = 0;
-        else
-            game_result = 1;
-        if(times_played == 0)
-            create_resultBar();
-        else
-            display_resultBar();
+            game_status = 0;
+            if(user_attempt >= max_attempts)
+                game_result = 0;
+            else
+                game_result = 1;
+            if(times_played == 0)
+                create_resultBar();
+            else
+                display_resultBar();
+        }
+        user_attempt += 1;
+        update_attempts();
     }
-    user_attempt += 1;
-    update_attempts();
-   
 }
 
 function create_resultBar()
@@ -212,7 +217,7 @@ function restart(event)
     user_attempt = 1;
     update_attempts();
     update_area();
-
+    game_status = 1;
 }
 
 function show_add()
@@ -289,15 +294,15 @@ function create_attempts_bar()
     elem = document.createElement("div");
     elem.id = "attemptsBar";
     elem.style.position = "absolute";
-    elem.innerText = "Попытка\n"+user_attempt+"/"+max_attempts;
+    elem.innerText = "Ход\n"+user_attempt+"/"+max_attempts;
     elem.style.marginTop = "5%";
-    elem.style.marginLeft = "20px";
+    elem.style.marginLeft = "70px";
     
     elem.style.color = "white";
 
     elem.style.border = "1px solid white";
     elem.style.width = "auto";
-    elem.style.padding = "5px";
+    elem.style.padding = "5px 20px";
     elem.style.height = "auto";
     elem.style.textAlign = "center";
     elem.style.fontSize = "2em";
@@ -310,5 +315,5 @@ function create_attempts_bar()
 function update_attempts()
 {
     elem = document.getElementById("attemptsBar");
-    elem.innerText = "Попытка\n"+user_attempt+"/"+max_attempts;
+    elem.innerText = "Ход\n"+user_attempt+"/"+max_attempts;
 }
