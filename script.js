@@ -5,7 +5,7 @@
 
 */
 
-var game_field_size = 500;
+var game_field_size = 700;
 
 
 function main()
@@ -28,7 +28,7 @@ function create_game_field()
     elem.style.position = "absolute";
     elem.style.width = game_field_size + "px";
     elem.style.height = game_field_size + "px";
-    //elem.style.marginLeft = "600px";
+    elem.style.marginLeft = "100px";
     elem.style.marginTop = "50px";
     elem.style.border = "3px solid black";
     elem.style.background = "black";
