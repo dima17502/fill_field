@@ -84,14 +84,33 @@ function cell_chosen(event)
     paint_area();
     update_area();
     if(user_area.length >= cells_in_field)
-        alert("Получилось!");
+        display_winBar();
     user_attempt += 1;
     if(user_attempt > max_attempts)
-        alert("Попытки закончились. Пробуем еще?");
+        display_loseBar();
     update_attempts();
    
 }
 
+function display_winBar()
+{
+    wb = document.createElement("div");
+    wb.id="winBar";
+    wb.style.position = "absolute";
+    wb.style.width = "auto";
+    wb.style.fontSize = "2em";
+    wb.innerText = "Получилось. Еще раз?"
+}
+
+function display_loseBar()
+{
+    lb = document.createElement("div");
+    lb.id="loseBar";
+    lb.style.position = "absolute";
+    lb.style.width = "auto";
+    lb.style.fontSize = "2em";
+    lb.innerText = "Не вышло. Пробуем ещё?"
+}
 
 function update_area()
 {
@@ -144,7 +163,7 @@ function create_info_field()
     einfo.style.marginTop = "15%";
     einfo.style.height = "auto";
     einfo.style.border = "1px solid white";
-    einfo.style.width = "10%";
+    einfo.style.width = "200px";
     einfo.style.fontSize = "1em";
     einfo.style.fontFamily = "Open Sans";
     einfo.style.color = "white";
