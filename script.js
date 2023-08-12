@@ -38,7 +38,7 @@ function set_body()
     eframe.style.width = vk_width + "px";
     eframe.style.height = vk_height + "px";
     document.body.appendChild(eframe);
-    eframe.style.background = "url('images/back.jpg')";
+    eframe.style.background = "url('back.jpg')";
 
 }
 function create_game_field()
